@@ -1,0 +1,20 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+#map {
+  height: 100%;
+}
+
+#markerList {
+  position: absolute;
+  top: 25px;
+  left: 150px;
+  background: rgba(47, 193, 174, 0.64);
+  color: rgb(90, 48, 233);
+}
+
+.markers {
+  background: transparent;
+}

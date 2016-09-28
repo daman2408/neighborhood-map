@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- BOOTSTRAP & STYLES -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css" integrity="sha384-2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj" crossorigin="anonymous">
+  <link rel="stylesheet" href="styles.css" media="screen">
+
+
+  <title>Neighborhood Map</title>
+
+</head>
+<body>
+
+  <div id="map"></div>
+  <div id="markerList">
+  </div>
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfgrAPVF8vUtrOu53pAYT0crHxm34FPyE&callback=initMap&libraries=places,geometry"
+  async defer></script>
+  <script src="map.js"></script>
+
+
+
+
+
+<!-- Scripts -->
+<script src="node_modules/jquery/dist/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/js/bootstrap.min.js" integrity="sha384-VjEeINv9OSwtWFLAtmc4JCtEJXXBub00gtSnszmspDLCtC0I4z4nqz7rEFbIZLLU" crossorigin="anonymous"></script>
+<!-- REACT FILES -->
+<script src="./build/react.js"></script>
+<script src="./build/react-dom.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+<!-- <script type="text/babel" src="app.js"></script> -->
+<script type="text/babel" src="tutorial.jsx"></script>
+
+</body>
+</html>
