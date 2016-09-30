@@ -5,14 +5,19 @@ html, body {
 }
 #map {
   height: 100%;
+  width: 100%;
 }
 
 #markerList {
   position: absolute;
-  top: 25px;
+  top: 225px;
   left: 150px;
   background: rgba(47, 193, 174, 0.64);
   color: rgb(90, 48, 233);
+}
+
+#markerList a {
+  color: rgb(48, 14, 164);
 }
 
 .markers {
