@@ -80,27 +80,4 @@ function initMap() {
     infowindowH.open(map, markerTwo);
   });
 
-            var populate = function() {
-              var daz = [];
-              for (let i = 0; i < model.length; i++) {
-                daz[i] = new google.maps.Marker(
-                  {
-                    position: {lat: model[i].coordinates.lat , lng: model[i].coordinates.lng},
-                    title: model[i].name
-                  }
-                );
-                daz[i].infowindow = new google.maps.InfoWindow(
-                  {
-                    content: model[i].name
-                  }
-                );
-                daz[i].setMap(map);
-                daz[i].addListener('click', function() {
-                  this.infowindow.open(map, daz[i]);
-                })
-              }
-              console.log(daz[0].infowindow)
-            };
-
-            populate();
 }

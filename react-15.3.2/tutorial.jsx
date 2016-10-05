@@ -42,21 +42,13 @@ var octopus = {
     }
 };
 
-var createMap = {
-    initMap: function() {
-        this.model = {
-            center: {
-                lat: 43.227,
-                lng: -79.719
-            }
-        };
 
         var middleMapSettings = {
             center: {
                 lat: 43.227,
                 lng: -79.719
             },
-            zoom: 13,
+            zoom: 11,
             styles: [
                 {
                     featureType: 'all',
@@ -109,40 +101,37 @@ var createMap = {
         };
 
 
-        var map = new google.maps.Map(document.getElementById('map'), middleMapSettings);
-//dynamically set the markers and the info window for them
-        function populate() {
-            var daz = [];
-            for (let i = 0; i < model.length; i++) {
-                daz[i] = new google.maps.Marker({
-                    position: {
-                        lat: model[i].coordinates.lat,
-                        lng: model[i].coordinates.lng
-                    },
-                    title: model[i].name
-                });
-                daz[i].infowindow = new google.maps.InfoWindow({content: model[i].description});
-                daz[i].setMap(map);
-                daz[i].addListener('click', function() {
-                    this.infowindow.open(map, daz[i]);
-                })
-            }
-        };
+//         var map = new google.maps.Map(document.getElementById('map'), middleMapSettings);
+// // dynamically set the markers and the info window for them
+//         function populate() {
+//             var daz = [];
+//             for (let i = 0; i < model.length; i++) {
+//                 daz[i] = new google.maps.Marker({
+//                     position: {
+//                         lat: model[i].coordinates.lat,
+//                         lng: model[i].coordinates.lng
+//                     },
+//                     title: model[i].name
+//                 });
+//                 daz[i].infowindow = new google.maps.InfoWindow({content: model[i].description});
+//                 daz[i].setMap(map);
+//                 daz[i].addListener('click', function() {
+//                     this.infowindow.open(map, daz[i]);
+//                 })
+//             }
+//         };
+//
+//         populate();
 
-        populate();
 
-    }
-};
 
-createMap.initMap();
-
-//use octopus to create an array of objects each containing a construction from new google.maps.Marker
-//loop through this array, call marker.setMap(map) on each construction and call the function.
-//every item in the array should create a marker on the google map dynamically
 
 ////REACT/////
 
 var data = octopus.getMarkerNames();
+
+
+
 
 var List = React.createClass({
     render: function() {
@@ -150,7 +139,7 @@ var List = React.createClass({
         var names = this.props.data.map(function(marker) {
             return (
                 <a href="#">
-                    <h1>{marker}</h1>
+                    <h1 onClick={octopus.getMarkers}>{marker}</h1>
                 </a>
             )
         })
@@ -188,5 +177,44 @@ var Description = React.createClass({
 
 ReactDOM.render(
     <div>
-    <Title mainHeading="Neighborhood Map"/>
+    <Title mainHeading="Dog Parks in the Golden Horshoe"/>
 </div>, document.getElementById('title'));
+
+var Test = React.createClass({
+
+  render: function() {
+    var map = new google.maps.Map(document.getElementById('map'), middleMapSettings);
+// dynamically set the markers and the info window for them
+    function populate() {
+        var daz = [];
+        for (let i = 0; i < model.length; i++) {
+            daz[i] = new google.maps.Marker({
+                position: {
+                    lat: model[i].coordinates.lat,
+                    lng: model[i].coordinates.lng
+                },
+                title: model[i].name
+            });
+            daz[i].infowindow = new google.maps.InfoWindow({content: model[i].description});
+            daz[i].setMap(map);
+            daz[i].addListener('click', function() {
+                this.infowindow.open(map, daz[i]);
+            })
+        }
+    };
+
+    populate();
+
+    return (
+      <div>
+        {map}
+      </div>
+    )
+  }
+});
+
+ReactDOM.render(
+  <div>
+  <Test />
+  </div>, document.getElementById('map')
+);
