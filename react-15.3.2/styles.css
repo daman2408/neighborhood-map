@@ -2,25 +2,38 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
+  background: rgb(16, 15, 61)
 }
 #map {
-  height: 60%;
-  width: 60%;
+  height: 100%;
+  width: 100%;
 }
 
-#markerList {
-  position: absolute;
-  top: 225px;
-  left: 150px;
-  background: rgba(47, 193, 174, 0.64);
-  color: rgb(90, 48, 233);
-  padding: 25px;
-}
-
-#markerList a {
-  color: rgb(48, 14, 164);
+.title {
+  color: rgb(200, 221, 250)
 }
 
 .markers {
-  background: transparent;
+  position: absolute;
+  top: 225px;
+  left: 30px;
+  background: rgba(16, 15, 61, .7);
+  color: rgb(199, 175, 47);
+  padding: 25px;
+  z-index: 2;
 }
+
+.containerX {
+  padding: 15px;
+  margin-left: 25px;
+  color: rgb(236, 108, 107)
+}
+
+.board {
+  background: rgba(56, 86, 92, 0.62);
+}
+
+
+/*.markers {
+  background: transparent;
+}*/

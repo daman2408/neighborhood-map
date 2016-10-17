@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- BOOTSTRAP & STYLES -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css" integrity="sha384-2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj" crossorigin="anonymous">
+  <link rel="stylesheet" href="styles.css" media="screen">
+  <style>
+    #edit {
+      position: relative;
+      top: 100px;
+    }
+
+  </style>
+
+  <script src="node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/js/bootstrap.min.js" integrity="sha384-VjEeINv9OSwtWFLAtmc4JCtEJXXBub00gtSnszmspDLCtC0I4z4nqz7rEFbIZLLU" crossorigin="anonymous"></script>
+
+  <!-- REACT FILES -->
+  <script src="./build/react.js"></script>
+  <script src="./build/react-dom.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+
+
+  <title>State Practice</title>
+
+</head>
+
+<body>
+<div id="check"></div>
+<div id="edit"></div>
+
+
+<script type="text/babel">
+
+// var Comment = React.createClass({
+//
+//   getInitialState: function() {
+//     return {editing: false}
+//   },
+//
+//   edit: function() {
+//     this.setState(
+//       {editing: true}
+//     );
+//
+//   },
+//
+//   remove: function() {
+//     console.log("removed");
+//     this.props.deleteComment(this.props.index);
+//   },
+//
+//   save: function() {
+//     this.props.editComment(this.refs.newText.value, this.props.index);
+//     this.setState(
+//       {editing: false}
+//     )
+//   },
+//
+//   renderEdit: function() {
+//     return (
+//       <div className="container">
+//         <input ref="newText" type="text" defaultValue={this.props.children} />
+//         <button className= "btn btn-success" onClick={this.save}>Save</button>
+//       </div>
+//     )
+//   },
+//
+//   renderDefault: function() {
+//     return (
+//       <div className="containerX">
+//         <h3>{this.props.children}</h3>
+//         <button className="btn btn-primary" onClick={this.edit}>Edit</button>
+//         <button className="btn btn-danger" onClick={this.remove}>Remove</button>
+//         </div>
+//     )
+//   },
+//
+//   render: function() {
+//     if (this.state.editing) {
+//       return this.renderEdit()
+//     } else {
+//       return this.renderDefault()
+//     }
+//   }
+// });
+//
+// var Board = React.createClass({
+//   getInitialState: function() {
+//     return {
+//       comments: [
+//         'Zero', 'One', 'Two'
+//       ]
+//     }
+//   },
+//
+//   removeComment: function(i) {
+//     var arr = this.state.comments;
+//     arr.splice(i, 1);
+//     this.setState({
+//       comments: arr
+//     })
+//   },
+//
+//   updateComment: function(text, i) {
+//     var arr = this.state.comments;
+//     arr[i] = text;
+//     this.setState({
+//       comments: arr
+//     })
+//   },
+//
+//   eachComment: function(text, i) {
+//       return (
+//         <Comment key={i} index={i} editComment = {this.updateComment} deleteComment = {this.removeComment}>{text}</Comment>
+//       )
+//     },
+//
+//   render: function() {
+//     return (
+//       <div className="board">
+//         {
+//           //a key is used to make each Comment component unique
+//           this.state.comments.map(this.eachComment)
+//         }
+//       </div>
+//     )
+//   }
+// });
+// ReactDOM.render(
+//   <Board />, document.getElementById('edit')
+// );
+/*
+  Things To Remember:
+    1. What is onChange? What is it used for?
+    2. What is the syntax for this.setState?
+*/
+
+/*1. Create comment component
+  2. Add buttons
+  3. Get the initial state
+  4. Create edit state
+  5. make the functions for saving, editing, and removing
+  6. add them to the comment component
+  7. make the input text a ref, pass it into the save function
+  8. create an encompassing component
+  9. give it an initial state, pass in data
+ 10. for each item in the state, create a comment component,
+ 11. create the functions for editing, removing, and saving the comments
+ 12. pass the functions into the child component
+*/
+
+var Comment = React.createClass({
+  getInitialState: function() {
+    return {
+    editing: false
+    };
+  },
+
+  edit: function() {
+    this.setState({
+      editing: true
+    })
+  },
+
+  save: function() {
+    this.props.update(this.refs.newText.value, this.props.index);
+    this.setState({
+      editing: false
+    })
+  },
+
+  remove: function() {
+    this.props.erase(this.props.index);
+  },
+
+  renderNormal: function() {
+    return (
+      <div className="containerX">
+        <h3>{this.props.children}</h3>
+        <button className="btn btn-primary" onClick={this.edit}>Edit</button>
+        <button className="btn btn-danger" onClick={this.remove}>Remove</button>
+      </div>
+    )
+  },
+
+  renderEdit: function() {
+    return (
+      <div className="containerX">
+        <textarea ref="newText" defaultValue={this.props.children}></textarea><br />
+        <button className="btn btn-success" onClick={this.save}>Save</button>
+      </div>
+    )
+  },
+
+  render: function() {
+    if (this.state.editing) {
+      return this.renderEdit();
+    } else {
+      return this.renderNormal();
+    }
+  }
+});
+var Parent = React.createClass({
+  getInitialState: function() {
+    return {
+      comments: [
+        'Schoolboy Q', 'Kendrick Lamar', 'Ab-Soul'
+      ]
+    };
+  },
+
+  updateComment: function(text, i) {
+    var arr = this.state.comments;
+    arr[i] = text;
+    this.setState({
+      comments: arr
+    });
+  },
+
+  removeComment: function(i) {
+    var arr = this.state.comments;
+    arr.splice(i, 1);
+    this.setState({
+      comments: arr
+    })
+  },
+
+  addComment: function() {
+    var arr = this.state.comments;
+    arr.push(this.refs.newRapper.value);
+    this.setState({
+      comments: arr
+    });
+    this.refs.newRapper.value = "";
+  },
+
+  eachComment: function(comment, i) {
+    return (
+      <Comment key={i} index={i} update={this.updateComment} erase={this.removeComment}>{comment}</Comment>
+    )
+  },
+
+  render: function() {
+    return (
+      <div>
+      <h2>TDE</h2>
+        {
+          this.state.comments.map(this.eachComment)
+        }
+        <input ref="newRapper" type="text" />
+        <button className="btn btn-warning" onClick={this.addComment}>Add Rapper</button>
+      </div>
+    )
+  }
+});
+ReactDOM.render(
+    <Parent />, document.getElementById('edit')
+
+);
+
+</script>
+
+
+
+
+</body>
