@@ -10,7 +10,7 @@ var model = [
         }
     }, {
         name: "Memphis Barbeque",
-        description: "One of the best and most popular restaurants in all of Stoney Creek. A classic smokehouse offering some of the finest Barbeque food you could ever ask for",
+        description: "<div id='pano'></div>",
         key: 2,
         coordinates: {
             lat: 43.209,
@@ -19,22 +19,33 @@ var model = [
     }
 ];
 
+var myController = {
+
+  getNames: function() {
+    var names = [];
+    for (let i = 0; i < model.length; i++) {
+      names.push((model[i].name).toLowerCase());
+    }
+    return names
+  }
+}
+
 ////REACT/////
 
 var EncompassingComponent = React.createClass({
 
   getInitialState: function() {
     return {
-      names: [
-        "Home", "Memphis BBQ"
-      ],
+      names: myController.getNames(),
       mapSettings: {
       center: {
         lat: 43.227,
         lng: -79.719
       },
       zoom:11
-    }
+    },
+    streetCoords: null,
+    isOpen: false,
   }
   },
 
@@ -50,30 +61,65 @@ var EncompassingComponent = React.createClass({
           });
         model[i].marker.infowindow = new google.maps.InfoWindow({content: model[i].description});
         model[i].marker.setMap(map);
+        model[i].marker.isOpen = false;
         model[i].marker.addListener('click', function() {
+            this.infowindow.isOpen = true;
             this.infowindow.open(map, model[i].marker);
-        })
+        });
       }
-
-
+    let view = new google.maps.StreetViewPanorama(document.getElementById('view'), {
+      streetViewControl: false,
+      position: this.state.streetCoords,
+      disableDefaultUI: true,
+      pov: {
+        heading: 180,
+        pitch: 0
+      }
+    });
+    view.addListener('pano_changed', function() {
+      console.log(view.getPano());
+    });
+    map.setStreetView(view);
   },
 
   openMarker: function(i) {
-      this.setState({
-        mapSettings: {
-          center: {
-            lat: model[i].coordinates.lat,
-            lng: model[i].coordinates.lng
-          },
-          zoom: 16
-        }
-      });
+    this.setState({
+      mapSettings: {
+        center: {
+          lat: model[i].coordinates.lat,
+          lng: model[i].coordinates.lng
+        },
+        zoom: 12
+      },
+      streetCoords:  {
+        lat: model[i].coordinates.lat,
+        lng: model[i].coordinates.lng
+      },
+      isOpen: true
+    });
+
+    if (this.state.isOpen) {
+      model[i].marker.infowindow.open(map, model[i].marker);
+    }
   },
 
   eachMarker: function(name, i) {
     return (
       <Marker key={i} index={i} openSesame={this.openMarker}>{name}</Marker>
     )
+  },
+
+  //search function that filters list of names in the model, changes state, pass the function into the input
+
+  searchMarkers: function() {
+    var arr = myController.getNames();
+    var typedValue = (this.refs.searchText.value).toLowerCase();
+    var newArr = arr.filter(function(name) {
+      return name.indexOf(typedValue) > -1
+    });
+    this.setState({
+      names: newArr
+    })
   },
 
   //main component will have the other componentes inside of it
@@ -83,6 +129,7 @@ var EncompassingComponent = React.createClass({
       <div>
         <PageTitle />
         <div className="markers">
+          <input ref="searchText" type="search" className="form-control" placeholder="Search" onChange={this.searchMarkers}/>
           {
             this.state.names.map(this.eachMarker)
           }
@@ -91,6 +138,8 @@ var EncompassingComponent = React.createClass({
     )
   }
 });
+
+
 
 var PageTitle = React.createClass({
   render: function() {
@@ -104,12 +153,10 @@ var PageTitle = React.createClass({
   }
 });
 
-
-
 var Marker = React.createClass({
 
   whatToDo: function() {
-    this.props.openSesame(this.props.index)
+    this.props.openSesame(this.props.index);
   },
 
   render: function() {

@@ -13,6 +13,16 @@ html, body {
   color: rgb(200, 221, 250)
 }
 
+#view {
+  z-index: 1;
+  width: 500px;
+  height: 250px;
+  position: absolute;
+  right: 30px;
+  bottom: 120px;
+  border-radius: 8px;
+}
+
 .markers {
   position: absolute;
   top: 225px;
@@ -21,6 +31,7 @@ html, body {
   color: rgb(199, 175, 47);
   padding: 25px;
   z-index: 2;
+  border-radius: 8px;
 }
 
 .containerX {
@@ -32,8 +43,3 @@ html, body {
 .board {
   background: rgba(56, 86, 92, 0.62);
 }
-
-
-/*.markers {
-  background: transparent;
-}*/
