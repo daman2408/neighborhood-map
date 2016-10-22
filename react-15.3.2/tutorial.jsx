@@ -1,20 +1,20 @@
 // tutorial1.js
 var model = [
     {
-        name: "Home",
+        name: "home",
         description: "My Home. I have lived here for most of my life, moving in during March break of 1997, I have so many cherished memories of this place!",
         key: 1,
         coordinates: {
-            lat: 43.22047260000001,
-            lng: -79.6472996
+            lat:  43.220473 ,
+            lng:  -79.6473
         }
     }, {
-        name: "Memphis Barbeque",
+        name: "memphis barbeque",
         description: "<div id='pano'></div>",
         key: 2,
         coordinates: {
             lat: 43.209,
-            lng: -79.666
+            lng: -79.667752
         }
     }
 ];
@@ -27,8 +27,47 @@ var myController = {
       names.push((model[i].name).toLowerCase());
     }
     return names
+  },
+
+  getModel: function() {
+    var modelCopy = [];
+    for (var i = 0; i < model.length; i++) {
+      modelCopy.push(model[i])
+    }
+    return modelCopy
   }
-}
+};
+
+var mapSettings = {
+  names: myController.getNames(),
+  center: {
+    lat: 43.227,
+    lng: -79.719
+  },
+  zoom:11
+};
+
+var modelCopy = myController.getModel();
+
+let map = new google.maps.Map(document.getElementById('map'), mapSettings);
+
+(function populate(modelName) {
+  for (let i = 0; i < modelName.length; i++) {
+      modelName[i].marker = new google.maps.Marker({
+          position: {
+              lat: modelName[i].coordinates.lat,
+              lng: modelName[i].coordinates.lng
+          },
+          title: modelName[i].name
+      });
+    modelName[i].marker.infowindow = new google.maps.InfoWindow({content: modelName[i].description});
+    modelName[i].marker.setMap(map);
+    modelName[i].marker.addListener('click', function() {
+        this.infowindow.open(map, modelName[i].marker);
+    });
+  }
+})(modelCopy);
+
 
 ////REACT/////
 
@@ -36,7 +75,7 @@ var EncompassingComponent = React.createClass({
 
   getInitialState: function() {
     return {
-      names: myController.getNames(),
+      names: myController.getModel(),
       mapSettings: {
       center: {
         lat: 43.227,
@@ -49,82 +88,44 @@ var EncompassingComponent = React.createClass({
   }
   },
 
-  displayMarkers: function() {
-    let map = new google.maps.Map(document.getElementById('map'), this.state.mapSettings);
-      for (let i = 0; i < model.length; i++) {
-          model[i].marker = new google.maps.Marker({
-              position: {
-                  lat: model[i].coordinates.lat,
-                  lng: model[i].coordinates.lng
-              },
-              title: model[i].name
-          });
-        model[i].marker.infowindow = new google.maps.InfoWindow({content: model[i].description});
-        model[i].marker.setMap(map);
-        model[i].marker.isOpen = false;
-        model[i].marker.addListener('click', function() {
-            this.infowindow.isOpen = true;
-            this.infowindow.open(map, model[i].marker);
-        });
-      }
-    let view = new google.maps.StreetViewPanorama(document.getElementById('view'), {
-      streetViewControl: false,
-      position: this.state.streetCoords,
-      disableDefaultUI: true,
-      pov: {
-        heading: 180,
-        pitch: 0
-      }
-    });
-    view.addListener('pano_changed', function() {
-      console.log(view.getPano());
-    });
-    map.setStreetView(view);
-  },
-
-  openMarker: function(i) {
-    this.setState({
-      mapSettings: {
-        center: {
-          lat: model[i].coordinates.lat,
-          lng: model[i].coordinates.lng
-        },
-        zoom: 12
-      },
-      streetCoords:  {
-        lat: model[i].coordinates.lat,
-        lng: model[i].coordinates.lng
-      },
-      isOpen: true
-    });
-
-    if (this.state.isOpen) {
-      model[i].marker.infowindow.open(map, model[i].marker);
-    }
-  },
-
-  eachMarker: function(name, i) {
-    return (
-      <Marker key={i} index={i} openSesame={this.openMarker}>{name}</Marker>
-    )
-  },
-
   //search function that filters list of names in the model, changes state, pass the function into the input
 
   searchMarkers: function() {
-    var arr = myController.getNames();
+
+    var arr = modelCopy;
     var typedValue = (this.refs.searchText.value).toLowerCase();
-    var newArr = arr.filter(function(name) {
-      return name.indexOf(typedValue) > -1
+    var newArr = arr.filter(function(element) {
+      if((element.name).indexOf(typedValue) > -1) {
+        return element
+      };
+    });
+    var newStateArray = arr.filter(function(element) {
+      if ( (element.name).indexOf(typedValue) > -1 ) {
+        return element.name
+      }
     });
     this.setState({
-      names: newArr
-    })
+      names: newStateArray,
+      fuck: newArr
+    });
+
+    return newArr
+
   },
 
-  //main component will have the other componentes inside of it
+  openMarker: function(i) {
+    var mCopy = this.searchMarkers();
+    map.setCenter({lat: mCopy[i].coordinates.lat, lng:mCopy[i].coordinates.lng});
+    mCopy[i].marker.infowindow.open(map, mCopy[i].marker);
+  },
+
+  eachMarker: function(element, i) {
+    return (
+      <Marker key={i} index={i} openSesame={this.openMarker}>{element.name}</Marker>
+    )
+  },
+
   render: function() {
-    this.displayMarkers();
     return (
       <div>
         <PageTitle />

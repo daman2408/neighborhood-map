@@ -15,7 +15,7 @@ html, body {
 
 #view {
   z-index: 1;
-  width: 500px;
+  width: 250px;
   height: 250px;
   position: absolute;
   right: 30px;
